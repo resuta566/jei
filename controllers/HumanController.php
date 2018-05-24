@@ -18,17 +18,17 @@ class HumanController extends \yii\web\Controller
                 'ruleConfig' => [
                     'class' => AccessRule::className(),
                 ],
-                'only' => ['create','update','delete'],
+                'only' => ['index','create','update','delete'],
                 'rules'=>[
                     [
-                        'actions'=>['create','update'],
+                        'actions'=>['index','create','update'],
                         'allow' => true,
                         'roles' => ['@']
                     ],
                     [
-                        'actions' => ['delete'],
+                        'actions' => ['index','delete'],
                         'allow' => true,
-                        'roles' => [100]
+                        'roles' => [User::ROLE_ADMIN]
                     ]
                 ],
             ],

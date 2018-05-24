@@ -8,9 +8,14 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <h1><?= $this->title?></h1>
+<?php if(Yii::$app->user->isGuest ): ?>
+    <span class="pull-left">Please <?= Html::a('login',['/site/login'])?> to create a post.</span>
+<?php else: ?>
 <p>
-        <?= Html::a('Create User', ['create'], ['class' => 'btn btn-success']) ?>
-    </p>
+    <?= Html::a('Create User',['/human/create'],
+        ['class'=>'btn btn-success']); ?>
+        </p>
+<?php endif; ?>
 <table class="table table-bordered">
     <tr>
         <th>Last Name</th>
