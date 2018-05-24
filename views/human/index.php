@@ -23,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <tr>
     
     <td>
-            <?= Html::a($model->last_name, ['/user/view', 'id'=>$model->id]); ?>
+            <?= Html::a($model->last_name, ['/human/view', 'id'=>$model->id]); ?>
         </td>  
         <td><?= $model->first_name ?></td>
         <td><?= $model->address ?></td>

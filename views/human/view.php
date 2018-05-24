@@ -3,7 +3,7 @@ use yii\widgets\DetailView;
 use yii\helpers\Html;
 
 $this->title = "User: $model->first_name";
-$this->params['breadcrumbs'][] = ['label'=>'User', 'url'=>['/user/index']];
+$this->params['breadcrumbs'][] = ['label'=>'User', 'url'=>['/human/index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <h1><?= $this->title; ?></h1>

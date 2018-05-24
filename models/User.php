@@ -2,95 +2,120 @@
 
 namespace app\models;
 
-use Yii;
-
-/**
- * This is the model class for table "user".
- *
- * @property int $id
- * @property int $license_id
- * @property int $vehicle_id
- * @property string $last_name
- * @property string $first_name
- * @property string $address
- * @property string $phone
- * @property string $sex
- * @property string $bdate
- * @property string $weight
- * @property string $height
- * @property string $nationality
- * @property string $age
- *
- * @property License $license
- * @property Vehicle $vehicle
- */
-class User extends \yii\db\ActiveRecord
+class User extends \yii\base\BaseObject implements \yii\web\IdentityInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public static function tableName()
-    {
-        return 'user';
-    }
+
+    const STATUS_DELETED = 0;
+    const STATUS_ACTIVE = 10;
+    const ROLE_ADMIN = 100;
+    const ROLE_EDITOR = 200;
+    const ROLE_AUTHOR = 300;
+
+    public $id;
+    public $username;
+    public $password;
+    public $role;
+    public $authKey;
+    public $accessToken;
+
+    private static $users = [
+        '100' => [
+            'id' => '100',
+            'username' => 'admin',
+            'password' => 'admin',
+            'role' => '100',
+            'authKey' => 'test100key',
+            'accessToken' => '100',
+        ],
+        '101' => [
+            'id' => '101',
+            'username' => 'user',
+            'password' => 'user',
+            'role' => '300',
+            'authKey' => 'test101key',
+            'accessToken' => '300',
+        ],
+    ];
+
 
     /**
      * {@inheritdoc}
      */
-    public function rules()
+    public static function findIdentity($id)
     {
-        return [
-            [['license_id', 'vehicle_id', 'last_name', 'first_name', 'address', 'phone', 'sex'], 'required'],
-            [['license_id', 'vehicle_id'], 'integer'],
-            [['address'], 'string'],
-            [['bdate'], 'safe'],
-            [['last_name'], 'string', 'max' => 60],
-            [['first_name'], 'string', 'max' => 50],
-            [['phone'], 'string', 'max' => 12],
-            [['sex'], 'string', 'max' => 1],
-            [['weight', 'height'], 'string', 'max' => 10],
-            [['nationality'], 'string', 'max' => 20],
-            [['age'], 'string', 'max' => 99],
-            [['license_id'], 'exist', 'skipOnError' => true, 'targetClass' => License::className(), 'targetAttribute' => ['license_id' => 'id']],
-            [['vehicle_id'], 'exist', 'skipOnError' => true, 'targetClass' => Vehicle::className(), 'targetAttribute' => ['vehicle_id' => 'id']],
-        ];
+        return isset(self::$users[$id]) ? new static(self::$users[$id]) : null;
+    }
+
+    public static function findRole($role)
+    {
+        return isset(self::$users[$role]) ? new static(self::$users[$role]) : null;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function attributeLabels()
+    public static function findIdentityByAccessToken($token, $type = null)
     {
-        return [
-            'id' => 'ID',
-            'license_id' => 'License ID',
-            'vehicle_id' => 'Vehicle ID',
-            'last_name' => 'Last Name',
-            'first_name' => 'First Name',
-            'address' => 'Address',
-            'phone' => 'Phone',
-            'sex' => 'Gender',
-            'bdate' => 'Bdate',
-            'weight' => 'Weight',
-            'height' => 'Height',
-            'nationality' => 'Nationality',
-            'age' => 'Age',
-        ];
+        foreach (self::$users as $user) {
+            if ($user['accessToken'] === $token) {
+                return new static($user);
+            }
+        }
+
+        return null;
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * Finds user by username
+     *
+     * @param string $username
+     * @return static|null
      */
-    public function getLicense()
+    public static function findByUsername($username)
     {
-        return $this->hasOne(License::className(), ['id' => 'license_id']);
+        foreach (self::$users as $user) {
+            if (strcasecmp($user['username'], $username) === 0) {
+                return new static($user);
+            }
+        }
+
+        return null;
+    }
+    
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getId()
+    {
+        return $this->id;
     }
 
     /**
-     * @return \yii\db\ActiveQuery
+     * {@inheritdoc}
      */
-    public function getVehicle()
+    public function getAuthKey()
     {
-        return $this->hasOne(Vehicle::className(), ['id' => 'vehicle_id']);
+        return $this->authKey;
+    }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function validateAuthKey($authKey)
+    {
+        return $this->authKey === $authKey;
+    }
+
+    /**
+     * Validates password
+     *
+     * @param string $password password to validate
+     * @return bool if password provided is valid for current user
+     */
+    public function validatePassword($password)
+    {
+        return $this->password === $password;
     }
 }

@@ -3,16 +3,16 @@
 use yii\db\Migration;
 
 /**
- * Handles the creation of table `user`.
+ * Handles the creation of table `human`.
  */
-class m180523_021722_create_user_table extends Migration
+class m180523_021722_create_human_table extends Migration
 {
     /**
      * {@inheritdoc}
      */
     public function safeUp()
     {
-        $this->createTable('user', [
+        $this->createTable('human', [
             'id' => $this->primaryKey(),
             'license_id' => $this->integer()->notNull(),
             'vehicle_id' => $this->integer()->notNull(),
@@ -28,24 +28,24 @@ class m180523_021722_create_user_table extends Migration
             'age' => $this->string(99)
         ]);
         $this->createIndex(
-            'idx-user-license_id',
-            'user','license_id'
+            'idx-human-license_id',
+            'human','license_id'
         );
 
         $this->addForeignKey(
-            'fk-user-license',
-            'user','license_id',
+            'fk-human-license',
+            'human','license_id',
             'license', 'id'
         );
 
         $this->createIndex(
-            'idx-user-vehicle',
-            'user','vehicle_id'
+            'idx-human-vehicle',
+            'human','vehicle_id'
         );
 
         $this->addForeignKey(
-            'fk-user-vehicle',
-            'user','vehicle_id',
+            'fk-human-vehicle',
+            'human','vehicle_id',
             'vehicle', 'id'
         );
     }
@@ -55,10 +55,10 @@ class m180523_021722_create_user_table extends Migration
      */
     public function safeDown()
     {
-        $this->dropForeignKey('fk-user-license', 'user');
-        $this->dropForeignKey('fk-user-vehicle', 'user');
-        $this->dropIndex('idx-user-license_id','user');
-        $this->dropIndex('idx-user-vehicle_id','user');
-        $this->dropTable('user');
+        $this->dropForeignKey('fk-human-license', 'human');
+        $this->dropForeignKey('fk-human-vehicle', 'human');
+        $this->dropIndex('idx-human-license_id','human');
+        $this->dropIndex('idx-human-vehicle_id','human');
+        $this->dropTable('human');
     }
 }

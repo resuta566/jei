@@ -9,6 +9,7 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\SignUpForm;
 
 class SiteController extends Controller
 {
@@ -20,15 +21,21 @@ class SiteController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['logout'],
+                'only' => ['login'],
                 'rules' => [
                     [
-                        'actions' => ['logout'],
                         'allow' => true,
+                        'actions' => ['login'],
+                        'roles' => ['?'],
+                    ],
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
                         'roles' => ['@'],
                     ],
                 ],
             ],
+        
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -61,6 +68,18 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
+
+        /*
+        $user = new app\models\User;
+        $user->username = "jei";
+        $user->email = "jeires566@gmail.com";
+        $user->setPassword('jeires');
+        $user->status = 10;
+
+        if(!$user->save()){
+            die("<h1>ERROR DESU!!</h1>" . print_r($user));
+        }
+        */
         return $this->render('index');
     }
 
@@ -125,4 +144,6 @@ class SiteController extends Controller
     {
         return $this->render('about');
     }
+
+   
 }

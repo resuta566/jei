@@ -1,7 +1,5 @@
 <?php
-
 use yii\db\Migration;
-
 /**
  * Handles the creation of table `license`.
  */
@@ -20,7 +18,6 @@ class m180523_020421_create_license_table extends Migration
             'expireDate' => $this->date()
         ]);
     }
-
     /**
      * {@inheritdoc}
      */
