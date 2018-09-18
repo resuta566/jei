@@ -13,7 +13,7 @@ class CpuController extends ActiveController
     public function actions()
     {
         $actions = parent::actions();
-        unset($actions['create'],$actions['view']);
+        unset($actions['create']);
         return $actions;
     }
 

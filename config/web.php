@@ -49,7 +49,7 @@ $config = [
         
         'urlManager' => [
             'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'showScriptName' => true,
             'rules' => [
                 ['class' => 'yii\rest\UrlRule', 'controller' => 'cpu'],
             ],
